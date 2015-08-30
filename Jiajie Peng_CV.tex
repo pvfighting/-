@@ -1,0 +1,459 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[9.5pt]{article}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+
+%\usepackage{enumitem}
+
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}%
+        {\vspace{-\baselineskip}\begin{list}{}{%
+       \setlength{\leftmargin}{\bibhang}%
+       \setlength{\itemindent}{-\leftmargin}%
+       \setlength{\itemsep}{\bibsep}%
+       \setlength{\parsep}{\z@}%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+%\usepackage[paper=letterpaper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=1.2in,     % Length of section titles
+%           marginparsep=.05in,       % Space between titles and text
+%            margin=1in,               % 1 inch margins
+%            includemp]{geometry}
+
+% Use these lines for A4-sized paper
+\usepackage[paper=a4paper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=25mm,    % Length of section titles
+            marginparsep=5mm,       % Space between titles and text
+            margin=20mm,              % 25mm margins
+            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+%% This gives us fun enumeration environments. compactitem will be nice.
+\usepackage{paralist}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, \hfill %
+                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+                    \hfill \,}}
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+% (optional argument typesets an object right-justified across from name
+%  as well)
+%
+% Usage: \makeheading{name}
+%        OR
+%        \makeheading[right_object]{name}
+%
+% Place at top of document. It should be the first thing.
+% If ``right_object'' is provided in the square-braced optional
+% argument, it will be right justified on the same line as ``name'' at
+% the top of the CV. For example:
+%
+%       \makeheading[\emph{Curriculum vitae}]{Your Name}
+%
+% will put an emphasized ``Curriculum vitae'' at the top of the document
+% as a title. Likewise, a picture could be included:
+%
+%   \makeheading[\includegraphics[height=1.5in]{my_picutre}]{Your Name}
+%
+% the picture will be flush right across from the name.
+\newcommand{\makeheading}[2][]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+             {\large \bfseries #2 \hfill #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+         \end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+%
+% Follow this section IMMEDIATELY with the first line of the section
+% text. Do not put whitespace in between. That is, do this:
+%
+%       \section{My Information}
+%       Here is my information.
+%
+% and NOT this:
+%
+%       \section{My Information}
+%
+%       Here is my information.
+%
+% Otherwise the top of the section header will not line up with the top
+% of the section. Of course, using a single comment character (%) on
+% empty lines allows for the function of the first example with the
+% readability of the second example.
+\renewcommand{\section}[2]%
+        {\pagebreak[3]\vspace{1.3\baselineskip}%
+         \phantomsection\addcontentsline{toc}{section}{#1}%
+         \hspace{0in}%
+         \marginpar{
+         \raggedright \scshape #1}#2}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1]}{\end{itemize}%
+         \vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\vspace{-\baselineskip}\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{compactitem}[#1]}{\end{compactitem}}
+
+% An environment IDENTICAL to innerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+        {\vspace{-\baselineskip}\begin{compactitem}[#1]}
+        {\end{compactitem}\vspace{-.6\baselineskip}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[3]}
+\newcommand{\halfblankline}{\quad\vspace{-0.5\baselineskip}\pagebreak[3]}
+
+% Uses hyperref to link DOI
+\newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+\newcommand\doi[1]{doi:\doilink{#1}}
+
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% For \email{ADDRESS}, links ADDRESS to the url mailto:ADDRESS
+\providecommand*\email[1]{\href{mailto:#1}{#1}}
+% Same as above, but pretty-prints ADDRESS in teletype fixed-width font
+%\renewcommand*\email[1]{\href{mailto:#1}{\texttt{#1}}}
+
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    \TeX}}
+\providecommand\BibTeX{{B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    \TeX}}
+\providecommand\Matlab{\textsc{Matlab}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{Jiajie Peng}
+
+\section{Contact Information}
+%
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+%\newlength{\rcollength}\setlength{\rcollength}{2.05in}%
+%
+\begin{tabular}[t]{ll}
+School of Computer Science and Technolodgy& \textit{Voice:} +86-187 4513 7124 \\
+315 Zonghe Building, 92 West Dazhi Street , & \textit{E-mail:} \email{jiajiepeng@hit.edu.cn}\\
+Nan Gang District, Harbin, China  & %\textit{Homepage:} \href{http://www.hlt.utdallas.edu/~zywei}{http://www.hlt.utdallas.edu/$\scriptsize{\sim}$zywei}\\
+\end{tabular}
+
+%\section{Objective}
+%
+%Placement in an academic position (i.e., faculty, postdoctoral, or
+%research scientist) that allows for advanced research in distributed
+%complex adaptive systems (i.e., modeling, analysis, design, and
+%verification) with a particular focus on the control of engineered
+%agents (e.g., for communications, control, software, and electronics
+%applications) and the analysis of biological phenomena (e.g.,
+%self-organization, ecological rationality)
+%
+\section{Research Interests}
+%
+Bioinformatics, data mining, data-driven ontology construction, gene ontology based semantic similarity, biological network reconstruction 
+
+%\section{Current Position}
+%\textbf{University of Texas at Dallas (UTD)}, Richardson, TX, USA \hfill Dec. 2014 - Present \\
+%Postdoctoral Associate, Human Language Technology Research Institute\\
+%Mentor: Yang Liu
+
+\section{Education}
+\textbf{Harbin Institute of Technolodgy}, Harbin, China \hfill Aug. 2010 - now \\
+Ph.D., Computer Science and Technolodgy\\
+Advisor: Yadong Wang\\
+\\
+\textbf{Michigan State University}, East Lansing, MI, USA\\
+Visiting Scholar, MSU-DOE Plant Research Laboratory \hfill Sep. 2010 - Sep. 2012\\
+Mentor: Jin Chen\\
+
+\textbf{Harbin Institute of Technology}, Harbin, China\\
+M.Phil., Computer Science and Technology \hfill Aug. 2008 - Jul. 2010\\
+B.Sc., Computer Science and Technology \hfill Aug. 2004 - Jul. 2008\\
+
+
+\section{Publications}
+\textbf{- Conference Papers}
+\begin{itemize}
+	\item \textbf{Zhongyu Wei} and Wei Gao, \emph{Gibberish, Assistant, or Master? Using Tweets Linking to News for Extractive Single-Document Summarization}, ACM SigIR 2015, accepted.
+	\item Gaoyan Ou, Wei Chen, Dongqing Yang, \textbf{Zhongyu Wei}, Binyang Li, Tengjiao Wang and Kam-Fai Wong, \emph{Exploiting Community Emotion for Microblog Event Detection},  EMNLP 2014.
+	\item \textbf{Zhongyu Wei}, Wei Gao, \emph{Utilizing Microblogs for Automatic News Highlights Extraction}, COLING 2014.
+	 \item Binyang Li, Lanjun Zhou, \textbf{Zhongyu Wei}, Kam-Fai Wong, Ruifeng Xu and Yunqing Xia, \emph{Web Information Mining and Decision Support Platform for the Modern Service Industry}, ACL 2014, demo paper.
+	\item Lanjun Zhou, Binyang Li, \textbf{Zhongyu Wei} and Kam-Fai Wong, \emph{An Open Discourse Corpus for Chinese with Annotated Explicit Discourse Connectives}, LREC 2014.
+	 \item \textbf{Zhongyu Wei}, Junwen Chen, Wei Gao, Binyang Li, Lanjun Zhou, Yulan He and Kam-Fai Wong, \emph{An Empirical Study on Uncertainty Identification in Social Media Context}, ACL 2013.
+    \item \textbf{Zhongyu Wei}, Yulan He, Wei Gao, Lanjun Zhou, Binyang Li and Kam-Fai Wong, \emph{Mainstream Media Behavior Analysis on Twitter: A Case Study on UK General Election}, ACM HyperText 2013.
+    \item Rebecca Ferguson, \textbf{Zhongyu Wei}, Yulan He, Simon Buckingham Shum, \emph{An Evaluation of Learning Analytics to Identify Exploratory Dialogue in Online Discussions},  ACM LAK 2013.
+     \item  Lanjun Zhou, Wei Gao, Binyang Li, \textbf{Zhongyu Wei}, and Kam-Fai Wong. \emph{Cross-lingual Identification of Ambiguous Discourse Connectives for Resource-Poor Language}, COLING 2012.
+      \item  Yulan He, Hassan Saif, \textbf{Zhongyu Wei}, and Kam-Fai Wong, \emph{Qunatising Opinions for Political Tweets Analysis}, LREC 2012.
+      \item  Binyang Li, Lanjun Zhou, Wei Gao, Kam-Fai Wong and \textbf{Zhongyu Wei}, \emph{An Effective Approach for Topic-Specific Opinion Summarization}, AIRS 2011.
+    \item  Lanjun Zhou, Binyang Li, Wei Gao, \textbf{Zhongyu Wei} and Kam-Fai Wong, \emph{Unsupervised Discovery of Discourse Relations for Eliminating Intra-sentence Polarity Ambiguities}, EMNLP 2011.
+    \item  Jun Xu, Qingcai Chen, Xiaolong Wang and \textbf{Zhongyu Wei}, \emph{One-class classification models for financial industry information recommendation}, ICMLC 2010.
+\end{itemize}
+
+\textbf{- Workshop Papers and Technical Reports}
+\begin{itemize}
+     \item Walid Magdy, Wei Gao, Tarek El-Ganainy and  \textbf{Zhongyu Wei}, \emph{QCRI at TREC 2014: Applying the KISS Principle for the TTG Task in the Microblog Track}, Microblog Track at TREC2014. (2nd place among 13 groups)
+    \item \textbf{Zhongyu Wei}, Wei Gao, \emph{Ranking Model Selection and Fusion for Effective Microblog Search}, SIGIR 2014 Workshop on Social Media Retrieval and Analysis(SoMeRA), Gold Coast, Australia, July, 2014.
+    \item Tarek El-Ganainy, \textbf{Zhongyu Wei}, Walid Magdy, and Wei Gao, \emph{QCRI at TREC 2013 Microblog Track}, Microblog Track at TREC2013. (2nd place among 65 automatic runs)
+    \item \sloppypar{Wei Gao, \textbf{Zhongyu Wei} and Kam-Fai Wong, \emph{Microblog Search and Filtering with Time Sensitive Feedback and Thresholding Based on BM25}, Microblog Track at TREC2012.}
+     \item  \textbf{Zhongyu Wei}, Wei Gao, Lanjun Zhou, Binyang Li, and Kam-Fai Wong, \emph{Exploring Tweets Normalization and Query Time Sensitivity for Twitter Search}, Microblog Track at TREC2011.
+\end{itemize}
+
+\textbf{- Journal Articles}
+\begin{itemize}
+       \item Binyang Li, Lanjun Zhou, Kam-Fai Wong, and \textbf{Zhongyu Wei}. \emph{An Effective Information Representation for Opinion Retrieval}, Journal of the American Society for Information Science and Technology (JASIST), 2015, accepted for publication.
+       \item \textbf{Zhongyu Wei}, Yulan He, Simon Buckingham Shum, Rebecca Ferguson, Wei Gao and Kam-Fai Wong, \emph{A Self-Training Framework for Automatic Identification of Exploratory Dialogue}, International Journal of Computational Linguistics and Applications (IJCLA), 4(1): 111 - 126 (2013).
+        \item Binyang Li, Kam-Fai Wong, Lanjun Zhou, \textbf{Zhongyu Wei}, and Jun Xu, \emph{Pests Hidden in Your Fans: An Effective Approach for Opinion Leader Discovery}, In Chinese Computational Linguistics and Natural Language Processing Based on Naturally Annotated Big Data, 227-237 (2013).
+        \item \textbf{Zhongyu Wei}, Jun Xu, Xiaolong Wang. \emph{One-class Classification based Finance News Story Recommendation}, Journal of Computational Information Systems (JCIS), 5(6): 1625-1631 (2009).
+ \end{itemize}
+
+\textbf{- Under Review}
+\begin{itemize}
+     \item \textbf{Zhongyu Wei}, Yang Liu, Chen Li, \emph{An Empirical Study on Using Topic Structure for News Highlights Generation}.
+     \item \textbf{Zhongyu Wei}, Yang Liu, Chen Li, \emph{Using Tweets to Help Sentence Compression for News Highlights Generation}.
+    \item \textbf{Zhongyu Wei}, Wei Gao, Kam-Fai Wong, Yang Liu, \emph{An Unsupervised Method of Using Tweets for News Highlights Generation}.
+     \item Jing Li, Wei Gao, \textbf{Zhongyu Wei}, Kam-Fai Wong, \emph{Summarizing Microblog Repost Trees with Structure Information}.
+     \item Jing Ma, Wei Gao, \textbf{Zhongyu Wei}, Kam-Fai Wong, \emph{Detect Rumors Using Time Series of Social Context Information on Microblogging Websites}.
+\end{itemize}
+
+\section{Research}
+%\textbf{University of Texas at Dallas}\\
+%\emph{Postdoctoral Associate} \hfill Dec. 2014 - Present\\
+\textbf{Chinese University of Hong Kong}\\
+\emph{Research Assistant} \hfill Aug. 2010 - Dec. 2014\\
+
+1. Utilizing Microblogs for Automatic News Highlights Generation\\
+    \emph{Collaboration project with Qatar Computing Institute of Technology}
+\begin{itemize}
+\itemsep-0.2em
+	\item \underline{OVERVIEW}: This project aims to use relevant tweets of a news article to help generate better news summary. We proposed three strategies: (1) extract news sentence with the help of relevant tweets; (2) extract tweets as news highlights; (3) use relevant tweets to help select and compress the news sentence as highlights. 
+	\item \underline{CORPUS}: We constructed two corpora for evaluation, including CNN news articles and their relevant tweets. One corpus includes human generated summary collected from Amazon Mechanical Turk. 
+	\item \underline{PUBLICATION}: COLING2014, SIGIR2015, two papers under review
+\end{itemize}
+
+2. Emergent Rumor Detection and Credibility Ranking
+\begin{itemize}
+\itemsep-0.2em
+	\item \underline{OVERVIEW}: This project aims to identify rumor events from social media and generate tweets summary for each identified rumor event. We proposed a rumor detection framework considering three factors: (1) text uncertainty, (2) temporal characteristics (3) opinion controversy.
+	\item \underline{CORPUS}: We constructed one corpus for rumor detection, including events consisting of related microblogs from a Chinese microblogging website. Human annotations were collected from Amazon Mechanical Turk.
+	\item \underline{PUBLICATION}: ACL2013, two papers under review
+\end{itemize}
+
+3. Web Information Mining and Decision Support Platform for the Modern Service Industry
+\begin{itemize}
+\itemsep-0.2em
+	\item \underline{OVERVIEW}: This project aims to provide enterprises with the services of retrieving news from websites, extracting commercial information, exploring customers' opinions, and analyzing collaborative/competitive social networks. The core technologies have been applied to the pillar industries of Hong Kong, including innovative finance, modem logistics, information technology, etc. 
+	\item \underline{SYSTEM}: \href{http://sepc111.se.cuhk.edu.hk:8080/modest}{[MODEST]} (in Chinese)
+	\item \underline{PUBLICATION}: ACL2014
+\end{itemize}
+
+4. Microblog Search
+\begin{itemize}
+\itemsep-0.2em
+	\item \underline{OVERVIEW}: We proposed to improve microblog search performance from two aspects: (1) utilize external information for pseudo relevance feedback (PRF) ; (2) re-rank search results by combing several state-of-the-art ranking algorithms.  
+	\item \sloppypar{\underline{PUBLICATION}: Technical reports on TREC2011, TREC2012, TREC2013, TREC2014 and SoMeRA2015}
+	\item \underline{IMPACT}: We participated in microblog track in TREC and won second place for year 2013 and 2014. 
+\end{itemize}
+
+5. Social Media Analysis
+\begin{itemize}
+\itemsep-0.2em
+	\item \underline{OVERVIEW}: This project aims to investigate the behavior of mainstream media on Twitter and study how they exert their influence to shape public opinion during the UK's 2010 General Election.
+	\item \underline{PUBLICATION}: ACM HyperText2013
+\end{itemize}
+
+\vspace{10pt}
+\textbf{Knowledge Media Institute}\\
+\emph{Research Associate} \hfill Apr. 2012 - Jun. 2012\\
+
+1. Exploratory Discourse Detection
+\begin{itemize}
+\itemsep-0.2em
+	\item \underline{OVERVIEW}: This project aims to identify exploratory dialogues from online learning material. We proposed a self-training framework to identify exploratory dialogue.
+	\item \underline{CORPUS}: We constructed a corpus including online meeting text with human annotations collected from two education experts. The annotation guideline was generated based on collaboration with annotators. 
+	\item \underline{SYSTEM}: The technique has been applied to \href{http://sociallearn.open.ac.uk/public}{Social Learn Platform}.
+	\item \underline{PUBLICATION}: IJCLA, ACM LAK2013
+\end{itemize}
+
+\section{Conference Review}
+\textbf{Secondary Reviewer}\\\\
+2015: NAACL, ACL\\
+2014: SigIR, COLING, EMNLP\\
+2013: ACL, EMNLP, IJCAI, RANLP, AIRS\\
+2012: ACL, EMNLP, PACLIC, AIRS\\
+2011: EMNLP
+
+\section{Professional Skills}
+\textbf{General}: Machine learning for NLP, fast modeling and prototyping, data analysis, familiar with human annotation collection for NLP task%, familiar with Twitter data processing
+
+\textbf{Programming}: Java, Python, Unix/Linux shell scripting, R, C/C++
+
+
+\section{Teaching Experience}
+\textbf{Teaching Assistant} at Systems Engineering and Engineering Management, CUHK\\
+
+Undergraduate course "Engineering Entrepreneurship" \hfill Spring 2011, 2012, 2013, 2014\\
+Undergraduate course "Information Systems Analysis and Design" \hfill Fall 2012\\
+Undergraduate course "Information Technology Management" \hfill Fall 2012, 2013\\
+Undergraduate course "Information Systems Management" \hfill Fall 2011\\
+
+\section{Mentorship}
+Jing Ma, Research Assistant, Chinese University of Hong Kong \hfill Spring 2015 - Present\\
+Jing Li, PhD, Chinese University of Hong Kong \hfill Spring 2014 - Present\\
+Jun Wen, PhD, Chinese University of Hong Kong \hfill Spring 2014 - Present\\
+
+
+\section{Honors and Awards}
+Excellent Graduate in Heilongjiang Province (top 1\%) \hfill 2010\\
+Excellent Postgraduate Student in HIT (top 1\%) \hfill 2010\\
+Excellent Graduate in Heilongjiang Province (top 1\%) \hfill 2008 \\
+Excellent Student Leader in Heilongjiang Province (top 1\%) \hfill 2006\\
+
+\section{Referees}
+
+\begin{tabular}{ll}
+\href{http://www.cintec.cuhk.edu.hk/kfwong/}{\textbf{Kam-Fai Wong}} & \href{http://www.qcri.com/our-people/bio?pid=44&par=acc&name=WeiGao}{\textbf{Wei Gao}}\\
+PhD, Professor & PhD, Scientist\\
+The Chinese University of Hong Kong & Qatar Computing Research Institute\\
+Email: kfwong@se.cuhk.edu.hk & Email: wgao@qf.org.qa\\
+\\
+%\href{http://www1.aston.ac.uk/eas/staff/dr-yulan-he/} {\textbf{Dr. Yulan HE}} & \href{http://cs.hitsz.edu.cn/teachers/t1/1181827169.html}{\textbf{Professor Xiaolong} WANG}\\
+%PhD, Senior lecturer & PhD, Professor\\
+%Aston University & Harbin Institute of Technology\\
+%Email: y.he9@aston.ac.uk & Email: wangxl@insun.hit.edu.cn\\
+%\end{tabular}
+
+%\href{http://www.cintec.cuhk.edu.hk/kfwong/}{\textbf{Professor Kam-Fai WONG}} & \href{http://www1.se.cuhk.edu.hk/~hcheng/}{\textbf{Prof. Hong CHENG}}\\
+%PhD, Professor & PhD, Assistant Professor\\
+%The Chinese University of Hong Kong & The Chinese University of Hong Kong\\
+%Email: kfwong@se.cuhk.edu.hk & Email: hcheng@se.cuhk.edu.hk\\
+%\\
+\href{http://www1.aston.ac.uk/eas/staff/dr-yulan-he/} {\textbf{Yulan He}} & \\
+PhD, Senior lecturer & \\
+Aston University & \\
+Email: y.he9@aston.ac.uk &\\
+
+%\href{http://www1.aston.ac.uk/eas/staff/dr-yulan-he/} {\textbf{Yulan He}} &\href{http://www.hlt.utdallas.edu/~yangl}{\textbf{Yang Liu}} \\
+%PhD, Senior lecturer & PhD, Associate Processor \\
+%Aston University & The University of Texas at Dallas\\
+%Email: y.he9@aston.ac.uk &Email: yangl@hlt.utdallas.edu\\
+\end{tabular}
+
+\end{document} 
